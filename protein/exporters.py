@@ -18,7 +18,6 @@ class ProteinJsonItemExporter(JsonItemExporter):
                 cgi.escape(item['url']),
                 cgi.escape(item['name']),
             ),
-            cgi.escape(item.get('size', '')),
             '&pound;%s' % cgi.escape(item['price']),
             '%.2f' % item['protein_per_100_kcal'],
         ]))
