@@ -6,6 +6,6 @@ class EnsureMetadata(object):
             raise DropItem("Item is unavailable")
 
         if 'protein_per_100_kcal' not in item:
-            raise DropItem("Did not parse nutrition data") 
+            raise DropItem("Did not parse nutrition data")
 
         return item
