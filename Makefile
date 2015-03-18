@@ -8,7 +8,7 @@ clean:
 	rm -f *.json *.log
 
 %.json:
-	scrapy crawl --output $@ $* 2>&1 | tee $@.log
+	scrapy crawl --output $@ --output-format=proteinjson $* 2>&1 | tee $@.log
 
 deploy: $(SOURCES)
 	set -eu; \

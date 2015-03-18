@@ -13,25 +13,10 @@
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
         $.getJSON('tesco.json', function (data) {
-          var rows = $.map(data, function (elem) {
-            var link = $('<a/>').attr('href', elem.url);
-
-            return [[
-                link.clone().append(
-                  $('<div class="image"/>')
-                    .css('background-image', 'url(' + elem.image_url + ')')
-                )[0].outerHTML
-              , link.clone().text(elem.name)[0].outerHTML
-              , elem.size || ''
-              , '&pound;' + elem.price
-              , Math.round(elem.protein_per_100_kcal * 100) / 100
-            ]];
-          });
-
           $('.js-loading').remove();
 
           $('#table').dataTable({
-            "data": rows,
+            "data": data,
             "order": [[4, "desc"]],
             "columns": [
               {"title": "Image"},
