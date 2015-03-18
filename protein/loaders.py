@@ -9,7 +9,7 @@ re_names = [re.compile(x, re.IGNORECASE) for x in (
     r'\s+$',
     r'>$',
     r'-$',
-    r'[\d\.,]+\s*(k?g|m?l|litre|ltr?)-?$',
+    r'[\d\.,]+\s*(k?g|gm|m?l|litre|ltr?)-?$',
     r'(\d+g?|twin)\s*(pack|slices|sachets|x|can)$',
     r'\s+(x)$',
 )]
