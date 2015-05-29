@@ -9,7 +9,7 @@ from ..loaders import ProductLoader
 class TescoSpider(scrapy.Spider):
     name = 'tesco'
     download_delay = 0.05
-    allowed_domains = ['www.tesco.com']
+    allowed_domains = ('www.tesco.com',)
 
     start_urls = (
         'http://www.tesco.com/groceries/',
