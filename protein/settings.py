@@ -10,3 +10,5 @@ ITEM_PIPELINES = {
 FEED_EXPORTERS = {
     'proteinjson': 'protein.exporters.ProteinJsonItemExporter',
 }
+
+USER_AGENT = 'protein/0 (+http://lamby.github.io/protein-ratios/)'
