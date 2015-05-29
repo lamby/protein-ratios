@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Protein per calorie ratios</title>
+
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
+
+    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $.getJSON('tesco.json', function (data) {
+          $('.js-loading').remove();
+
+          $('#table').dataTable({
+            "data": data,
+            "order": [[3, "desc"]],
+            "columns": [
+              {
+                "title": "",
+                "orderable": false
+              },
+              {"title": "Name"},
+              {"title": "Price"},
+              {"title": "Protein per 100 kcal (g)"}
+            ],
+            "pageLength": 50
+          });
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      .image {
+        width: 100px;
+        height: 100px;
+        margin: 5px 25px;
+        background: url() center center no-repeat;
+        background-size: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/lamby/protein-ratios"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <div class="container">
+      <h1 class="page-header">
+        Protein per calorie ratios
+      </h1>
+
+      <div class="progress js-loading">
+        <div class="progress-bar progress-bar-striped active" style="width: 100%"></div>
+      </div>
+
+      <table id="table" cellspacing="0"></table>
+
+      <br>
+      <br>
+    </div>
+  </body>
+</html>
