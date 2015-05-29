@@ -36,6 +36,12 @@ class TescoSpider(scrapy.Spider):
                 "Beer & Cider",
             ),
         },
+        "Health & Beauty": {
+            'filter': 'whitelist',
+            'values': (
+                "Healthcare",
+            ),
+        },
     }
 
     def parse(self, response):
