@@ -16,6 +16,21 @@ class TescoSpider(scrapy.Spider):
     )
 
     def parse(self, response):
+        if response.url in self.start_urls:
+            return self.parse_start(response)
+
+        elif '/groceries/department/' in response.url:
+            return self.parse_primary(response)
+
+        elif '/groceries/product/browse/' in response.url:
+            return self.parse_secondary(response)
+
+        elif '/groceries/product/details/' in response.url:
+            return self.parse_product(response)
+
+        self.log("Could not parse type of URL")
+
+    def parse_start(self, response):
         for x in response.css('#grocery-navigation li a'):
             name = ' '.join(x.css('::text').extract())
 
@@ -29,7 +44,7 @@ class TescoSpider(scrapy.Spider):
                 self.log("Ignoring primary navigation link %r" % name)
                 continue
 
-            yield self._request(response, x, self.parse_primary)
+            yield self._request(response, x)
 
     def parse_primary(self, response):
         for x in response.css('#superDeptItems li a'):
@@ -43,15 +58,15 @@ class TescoSpider(scrapy.Spider):
                 self.log("Ignoring secondary navigation link: %s" % name)
                 continue
 
-            yield self._request(response, x, self.parse_secondary)
+            yield self._request(response, x)
 
     def parse_secondary(self, response):
         # Paginate
         for x in response.css('.controlsBar p.next a'):
-            yield self._request(response, x, self.parse_secondary)
+            yield self._request(response, x)
 
         for x in response.css('.productLists li.product h2 a'):
-            yield self._request(response, x, self.parse_product)
+            yield self._request(response, x)
 
     def parse_product(self, response):
         l = ProductLoader(item=Product(), response=response)
@@ -70,7 +85,7 @@ class TescoSpider(scrapy.Spider):
 
         return l.load_item()
 
-    def _request(self, response, elem, fn):
+    def _request(self, response, elem):
         url = urlparse.urljoin(
             response.url,
             elem.css('::attr(href)').extract()[0],
@@ -79,4 +94,4 @@ class TescoSpider(scrapy.Spider):
         name = ' '.join(elem.css('::text').extract()).strip()
         self.log("Following link labelled %r" % name)
 
-        return scrapy.Request(url, fn)
+        return scrapy.Request(url, self.parse)
