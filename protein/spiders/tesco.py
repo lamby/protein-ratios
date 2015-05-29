@@ -45,7 +45,7 @@ class TescoSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        if response.url in self.start_urls:
+        if response.url.endswith('/groceries/'):
             return self.parse_start(response)
 
         elif '/groceries/department/' in response.url:
