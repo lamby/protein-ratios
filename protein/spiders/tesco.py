@@ -26,7 +26,7 @@ class TescoSpider(scrapy.Spider):
                 "Frozen Food",
                 "Drinks",
             ):
-                self.log("Ignoring primary navigation link: %s" % name)
+                self.log("Ignoring primary navigation link %r" % name)
                 continue
 
             yield self._request(response, x, self.parse_primary)
