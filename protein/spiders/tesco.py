@@ -15,6 +15,29 @@ class TescoSpider(scrapy.Spider):
         'http://www.tesco.com/groceries/',
     )
 
+    navigation = {
+        "Fresh Food": {
+            'filter': None,
+        },
+        "Bakery": {
+            'filter': None,
+        },
+        "Food Cupboard": {
+            'filter': None,
+        },
+        "Frozen Food": {
+            'filter': None,
+        },
+        "Drinks": {
+            'filter': 'blacklist',
+            'values': (
+                "Wine",
+                "Spirits",
+                "Beer & Cider",
+            ),
+        },
+    }
+
     def parse(self, response):
         if response.url in self.start_urls:
             return self.parse_start(response)
@@ -34,28 +57,38 @@ class TescoSpider(scrapy.Spider):
         for x in response.css('#grocery-navigation li a'):
             name = ' '.join(x.css('::text').extract())
 
-            if name not in (
-                "Fresh Food",
-                "Bakery",
-                "Food Cupboard",
-                "Frozen Food",
-                "Drinks",
-            ):
+            if name not in self.navigation:
                 self.log("Ignoring primary navigation link %r" % name)
                 continue
 
             yield self._request(response, x)
 
     def parse_primary(self, response):
+        primary_name = ' '.join(response.css('h1#intro::text').extract())
+
+        try:
+            config = self.navigation[primary_name]
+        except KeyError:
+            self.log("No configuration for primary %r" % primary_name)
+            return
+
+        filter_ = config['filter']
+
         for x in response.css('#superDeptItems li a'):
             name = ' '.join(x.css('::text').extract())
 
-            if name in (
-                "Wine",
-                "Spirits",
-                "Beer & Cider",
-            ):
-                self.log("Ignoring secondary navigation link: %s" % name)
+            if filter_ == 'whitelist' and name not in config['values']:
+                self.log("Ignoring %r in %r as it's not in whitelist" % (
+                    name,
+                    primary_name,
+                ))
+                continue
+
+            if filter_ == 'blacklist' and name in config['values']:
+                self.log("Ignoring %r in %r as it's blacklisted" % (
+                    name,
+                    primary_name,
+                ))
                 continue
 
             yield self._request(response, x)
