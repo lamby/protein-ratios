@@ -70,7 +70,7 @@ class TescoSpider(scrapy.Spider):
             yield self._request(response, x)
 
     def parse_primary(self, response):
-        primary_name = ' '.join(response.css('h1#intro::text').extract())
+        primary_name = ' '.join(response.css('h1 span::text').extract())
 
         try:
             config = self.navigation[primary_name]
